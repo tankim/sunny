@@ -1,0 +1,11 @@
+# cp terraform.tfvars.example terraform.tfvars 후 수정
+region       = "ap-northeast-2"
+project_name = "solar-telemetry"
+
+# 개발 중에는 짧게 해서 S3에 빨리 쌓이는 걸 확인 (운영은 300 권장)
+firehose_buffer_interval_seconds = 60
+
+alarm_email = "" # 예: "ops@example.com" – 배포 후 확인 메일의 링크를 눌러야 구독됨
+
+# 개발 환경에서만 true 권장
+force_destroy_data_bucket = false
