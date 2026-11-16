@@ -46,7 +46,7 @@ resource "aws_glue_catalog_table" "telemetry" {
       }
     }
 
-    # src/ingest/app.py 의 build_record()와 컬럼이 일치해야 한다
+    # Firehose로 보내는 JSON 레코드의 키가 이 컬럼과 일치해야 한다 (README 참고)
     dynamic "columns" {
       for_each = [
         { name = "device_id", type = "string", comment = "장치 ID" },
@@ -62,9 +62,7 @@ resource "aws_glue_catalog_table" "telemetry" {
         { name = "energy_today", type = "double", comment = "금일 누적 발전량 (kWh)" },
         { name = "status", type = "string", comment = "장치 상태 코드" },
         { name = "extra", type = "string", comment = "정의되지 않은 추가 필드 (JSON)" },
-        { name = "ingest_ts", type = "timestamp", comment = "수집 서버 수신 시각 (UTC)" },
-        { name = "request_id", type = "string", comment = "API Gateway 요청 ID" },
-        { name = "api_key_id", type = "string", comment = "요청에 사용된 API 키 ID" },
+        { name = "ingest_ts", type = "timestamp", comment = "수집 시각 (UTC)" },
       ]
       content {
         name    = columns.value.name
