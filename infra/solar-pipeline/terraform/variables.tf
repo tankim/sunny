@@ -15,12 +15,6 @@ variable "project_name" {
   }
 }
 
-variable "stage_name" {
-  description = "API Gateway 스테이지 이름 (URL 경로에 포함됨)"
-  type        = string
-  default     = "v1"
-}
-
 variable "glue_database_name" {
   description = "Glue/Athena 데이터베이스 이름 (소문자, 언더스코어)"
   type        = string
@@ -47,18 +41,6 @@ variable "firehose_buffer_size_mb" {
     condition     = var.firehose_buffer_size_mb >= 64 && var.firehose_buffer_size_mb <= 128
     error_message = "64~128MB 사이여야 합니다."
   }
-}
-
-variable "throttle_rate_limit" {
-  description = "API 키(사용량 계획)당 초당 평균 요청 수"
-  type        = number
-  default     = 50
-}
-
-variable "throttle_burst_limit" {
-  description = "API 키(사용량 계획)당 순간 최대 요청 수"
-  type        = number
-  default     = 100
 }
 
 variable "raw_transition_to_ia_days" {

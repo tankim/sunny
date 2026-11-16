@@ -6,10 +6,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
-    archive = {
-      source  = "hashicorp/archive"
-      version = "~> 2.4"
-    }
   }
 
   # 팀에서 함께 쓰려면 상태 파일을 S3에 두세요 (버킷은 미리 생성 필요)

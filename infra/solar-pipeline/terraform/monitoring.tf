@@ -9,42 +9,7 @@ resource "aws_sns_topic_subscription" "email" {
   endpoint  = var.alarm_email
 }
 
-# 수집 Lambda 오류
-resource "aws_cloudwatch_metric_alarm" "ingest_errors" {
-  alarm_name          = "${var.project_name}-ingest-errors"
-  alarm_description   = "Ingest Lambda is throwing errors"
-  namespace           = "AWS/Lambda"
-  metric_name         = "Errors"
-  dimensions          = { FunctionName = aws_lambda_function.ingest.function_name }
-  statistic           = "Sum"
-  period              = 300
-  evaluation_periods  = 1
-  threshold           = 1
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [aws_sns_topic.alarms.arn]
-  ok_actions          = [aws_sns_topic.alarms.arn]
-}
 
-# API 5xx (Firehose 저장 실패 시 503 포함)
-resource "aws_cloudwatch_metric_alarm" "api_5xx" {
-  alarm_name        = "${var.project_name}-api-5xx"
-  alarm_description = "API Gateway is returning 5xx responses"
-  namespace         = "AWS/ApiGateway"
-  metric_name       = "5XXError"
-  dimensions = {
-    ApiName = aws_api_gateway_rest_api.this.name
-    Stage   = aws_api_gateway_stage.this.stage_name
-  }
-  statistic           = "Sum"
-  period              = 300
-  evaluation_periods  = 1
-  threshold           = 5
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [aws_sns_topic.alarms.arn]
-  ok_actions          = [aws_sns_topic.alarms.arn]
-}
 
 # S3 전달 지연 (가장 오래된 미전달 레코드의 나이)
 resource "aws_cloudwatch_metric_alarm" "firehose_freshness" {
